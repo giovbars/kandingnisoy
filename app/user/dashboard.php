@@ -93,7 +93,7 @@ if ($goatsTableExists) {
     }
 
  $stmt = $pdo->prepare(
-    "SELECT goat_id, goat_name, status, health_status, photo_path, updated_at
+    "SELECT id, goat_id, goat_name, status, health_status, photo_path, updated_at
      FROM goats
      WHERE user_id = ?
      ORDER BY updated_at DESC
@@ -1468,11 +1468,11 @@ renderHeader($title);
         <?php endif; ?>
 
         <div style="min-width: 0;">
-            <a href="<?php echo BASE_URL; ?>/app/goats/goat-view.php?goat_id=<?php echo urlencode($goat['goat_id']); ?>"
-               class="goat-card-id">
-                <i class="fas fa-tag" style="color: #86efac;" aria-hidden="true"></i>
-                <?php echo htmlspecialchars($goat['goat_id']); ?>
-            </a>
+<a href="<?php echo BASE_URL; ?>/app/goats/goat-view.php?id=<?php echo urlencode($goat['id']); ?>"
+   class="goat-card-id">
+    <i class="fas fa-tag" style="color: #86efac;" aria-hidden="true"></i>
+    <?php echo htmlspecialchars($goat['goat_id']); ?>
+</a>
             <div class="goat-card-name">
                 <?php echo htmlspecialchars($goat['goat_name']); ?>
             </div>

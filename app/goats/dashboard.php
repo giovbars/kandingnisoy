@@ -468,6 +468,45 @@ renderHeader($title);
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(34,197,94,0.12);
     }
+
+    /* ---------- Goat card photo ---------- */
+    .goat-card-photo {
+        width: 100%;
+        height: 160px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f0fdf4;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #dcfce7;
+        position: relative;
+    }
+    .goat-card-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+    .goat-card-photo .no-photo {
+        color: #bbf7d0;
+        font-size: 42px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: 100%;
+        height: 100%;
+    }
+    .goat-card-photo .no-photo span {
+        font-size: 11px;
+        color: #94a3b8;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
     .goat-card-top {
         display: flex;
         justify-content: space-between;
@@ -774,8 +813,46 @@ renderHeader($title);
                 $sexColor = $goat['sex'] === 'male' ? '#2563eb' : '#db2777';
                 $sexBg = $goat['sex'] === 'male' ? '#dbeafe' : '#fce7f3';
                 $canEdit = canEditGoat($currentRole, $currentUserId, $goat['user_id']);
+
+                // --- Photo handling ---
+                // Same pattern as the working user dashboard: photo_path is stored
+                // relative to /app/goats/, so we build the URL the same way here.
+                $photoPath = trim($goat['photo_path'] ?? '');
+                $hasPhoto = $photoPath !== '';
+
+                if ($hasPhoto) {
+                    if (preg_match('#^https?://#i', $photoPath)) {
+                        // Already a full URL — use as-is
+                        $photoUrl = $photoPath;
+                    } else {
+                        // Matches the working dashboard: BASE_URL + /app/goats/ + photo_path
+                        $photoUrl = rtrim(BASE_URL, '/') . '/app/goats/' . ltrim($photoPath, '/');
+                    }
+                }
             ?>
                 <div class="goat-card" style="border-left:5px solid <?php echo $healthColor; ?>;">
+
+                    <!-- ===== PHOTO ===== -->
+                    <div class="goat-card-photo">
+                        <?php if ($hasPhoto): ?>
+                            <img
+                                src="<?php echo htmlspecialchars($photoUrl); ?>"
+                                alt="<?php echo htmlspecialchars($goat['goat_name']); ?>"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            >
+                            <div class="no-photo" style="display:none;">
+                                <i class="fas fa-image"></i>
+                                <span>No photo</span>
+                            </div>
+                        <?php else: ?>
+                            <div class="no-photo">
+                                <i class="fas fa-image"></i>
+                                <span>No photo</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
                     <div class="goat-card-top">
                         <div style="min-width:0;">
                             <a href="goat-view.php?id=<?php echo urlencode($goat['id']); ?>" class="goat-card-id">
