@@ -1,0 +1,16 @@
+php_flag engine off
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4+
+    Require all denied
+    <FilesMatch "\.(jpe?g|png|webp|gif)$">
+        Require all granted
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    # Apache 2.2 fallback
+    Deny from all
+    <FilesMatch "\.(jpe?g|png|webp|gif)$">
+        Allow from all
+    </FilesMatch>
+</IfModule>

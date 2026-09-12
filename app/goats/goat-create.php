@@ -12,6 +12,61 @@ if (!canRegisterGoat($currentRole)) {
     die("Access denied. Only Farmers can register goats.");
 }
 
+// Where goat photos are stored on disk and served from.
+define('GOAT_UPLOAD_DIR', __DIR__ . '/uploads/goats/');
+define('GOAT_UPLOAD_URL', BASE_URL . '/app/goats/uploads/goats/');
+
+/**
+ * Validates and moves an uploaded goat photo to the uploads directory.
+ * Returns the relative path (to store in DB) or null if no file was uploaded.
+ * Throws an Exception with a user-facing message on validation failure.
+ */
+function handleGoatPhotoUpload(array $file): ?string {
+    if (!isset($file['error']) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null; // no file selected, that's fine - photo is optional
+    }
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new Exception("Photo upload failed (error code {$file['error']}).");
+    }
+
+    $maxBytes = 5 * 1024 * 1024; // 5MB
+    if ($file['size'] > $maxBytes) {
+        throw new Exception("Photo is too large. Max size is 5MB.");
+    }
+
+    // Verify it's actually an image by inspecting its content -
+    // never trust the client-supplied filename or mime type.
+    $imageInfo = getimagesize($file['tmp_name']);
+    if ($imageInfo === false) {
+        throw new Exception("Uploaded file is not a valid image.");
+    }
+
+    $allowedMimes = [
+        'image/jpeg' => 'jpg',
+        'image/png'  => 'png',
+        'image/webp' => 'webp',
+    ];
+    $mime = $imageInfo['mime'];
+    if (!isset($allowedMimes[$mime])) {
+        throw new Exception("Only JPG, PNG, or WEBP images are allowed.");
+    }
+    $ext = $allowedMimes[$mime];
+
+    if (!is_dir(GOAT_UPLOAD_DIR)) {
+        mkdir(GOAT_UPLOAD_DIR, 0755, true);
+    }
+
+    // Collision-resistant, safe filename - not based on user input.
+    $filename = 'goat_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+    $destination = GOAT_UPLOAD_DIR . $filename;
+
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        throw new Exception("Could not save the uploaded photo.");
+    }
+
+    return 'uploads/goats/' . $filename; // relative path, stored in DB
+}
+
 // Auto-generates the next sequential Goat ID *per farmer* - e.g. Farmer A's
 // goats are G-0001, G-0002, ... and Farmer B's goats are ALSO G-0001, G-0002, ...
 // (each farmer has their own independent numbering, not a shared global counter).
@@ -44,6 +99,15 @@ if ($currentRole === 'admin') {
 
 $message = '';
 $success = false;
+
+// ===== POST/REDIRECT/GET: pick up the success flag after a redirect =====
+// This runs on the fresh GET load that follows a successful registration.
+// It means refreshing the page after registering NEVER resubmits the form,
+// because there's no POST data left to resubmit - just a plain GET request.
+if (isset($_GET['registered']) && $_GET['registered'] == '1') {
+    $success = true;
+    $message = "Goat registered successfully! Goat ID: " . htmlspecialchars($_GET['goat_id'] ?? '');
+}
 
 // Preserve submitted values on validation failure.
 // For a regular Farmer we already know the owner (themself), so we can show
@@ -106,6 +170,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = ($currentRole === 'admin') ? "Please select a valid Farmer to register this goat under." : "Unable to determine owner.";
     }
 
+    // Handle the photo upload once, up front (not inside the retry loop
+    // below - that loop only retries the goat_id number, not the file).
+    $photo_path = null;
+    if (empty($errors)) {
+        try {
+            if (!empty($_FILES['goat_photo']) && $_FILES['goat_photo']['error'] !== UPLOAD_ERR_NO_FILE) {
+                $photo_path = handleGoatPhotoUpload($_FILES['goat_photo']);
+            }
+        } catch (Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+    }
+
     if (empty($errors)) {
         // Goat ID is auto-generated here, right before insert (not earlier),
         // so it reflects the latest number even if other goats were added
@@ -122,10 +199,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("
                     INSERT INTO goats
                         (goat_id, user_id, goat_name, tag_number, sex, breed, date_of_birth, color,
-                         identifying_characteristics, date_acquired, health_status, status, date_registered)
+                         identifying_characteristics, photo_path, date_acquired, health_status, status, date_registered)
                     VALUES
                         (:goat_id, :user_id, :goat_name, :tag_number, :sex, :breed, :dob, :color,
-                         :characteristics, :date_acquired, :health_status, 'active', NOW())
+                         :characteristics, :photo_path, :date_acquired, :health_status, 'active', NOW())
                 ");
                 $stmt->execute([
                     ':goat_id' => $goat_id_input,
@@ -137,32 +214,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':dob' => $date_of_birth !== '' ? $date_of_birth : null,
                     ':color' => $color !== '' ? $color : null,
                     ':characteristics' => $identifying_characteristics !== '' ? $identifying_characteristics : null,
+                    ':photo_path' => $photo_path,
                     ':date_acquired' => $date_acquired !== '' ? $date_acquired : null,
                     ':health_status' => $health_status,
                 ]);
 
                 $inserted = true;
                 $registeredGoatId = $goat_id_input;
-                $message = "Goat registered successfully! Goat ID: " . htmlspecialchars($goat_id_input);
-                $success = true;
 
                 logGoatActivity($pdo, $currentUserId, $_SESSION['email'], 'goat_registered', 'success', $goat_id_input, [
                     'owner_id' => $ownerId,
                     'health_status' => $health_status,
                     'status' => 'active',
+                    'photo' => $photo_path ? 'uploaded' : 'none',
                 ]);
 
-                // Clear form on success, and pre-load the next auto Goat ID
-                $goat_name = '';
-                $tag_number = '';
-                $sex = '';
-                $breed = '';
-                $date_of_birth = '';
-                $color = '';
-                $identifying_characteristics = '';
-                $date_acquired = '';
-                $health_status = 'unknown';
-                $goat_id_input = generateNextGoatId($pdo, $ownerId);
+                // ===== POST/REDIRECT/GET =====
+                // Redirect to a plain GET request instead of falling through
+                // and re-rendering the page. This means if the user refreshes
+                // the page afterward, the browser just reloads a GET page -
+                // there's no POST data left to resubmit, so no duplicate insert.
+                header('Location: ' . BASE_URL . '/app/goats/goat-create.php?registered=1&goat_id=' . urlencode($goat_id_input));
+                exit;
 
             } catch (PDOException $e) {
                 // MySQL 1062 = duplicate entry (the UNIQUE constraint caught a race).
@@ -177,11 +250,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if (!$inserted && !$success && $message === '') {
-            $message = "Could not generate a unique Goat ID right now. Please try again.";
-            $success = false;
+        if (!$inserted) {
+            // Clean up the orphaned photo file if the insert never succeeded.
+            if ($photo_path && file_exists(__DIR__ . '/' . $photo_path)) {
+                unlink(__DIR__ . '/' . $photo_path);
+            }
+            if (!$success && $message === '') {
+                $message = "Could not generate a unique Goat ID right now. Please try again.";
+                $success = false;
+            }
         }
     } else {
+        // Validation failed - clean up any photo we already saved to disk
+        // (the record won't be inserted, so don't leave an orphaned file).
+        if ($photo_path && file_exists(__DIR__ . '/' . $photo_path)) {
+            unlink(__DIR__ . '/' . $photo_path);
+        }
         $message = implode(' ', $errors);
     }
 }
@@ -392,6 +476,7 @@ renderHeader($title);
 
     .gform-card input[type="text"],
     .gform-card input[type="date"],
+    .gform-card input[type="file"],
     .gform-card select,
     .gform-card textarea {
         width: 100%;
@@ -414,6 +499,20 @@ renderHeader($title);
     }
 
     .gform-note { font-size: 12px; color: #a0aec0; margin-top: 4px; }
+
+    .gform-photo-preview {
+        margin-top: 10px;
+        display: none;
+        max-width: 160px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid #bbf7d0;
+    }
+    .gform-photo-preview img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
 
     .gform-admin-box {
         background: #fffbeb;
@@ -441,6 +540,7 @@ renderHeader($title);
         box-shadow: 0 2px 6px rgba(34,197,94,0.3);
     }
     .btn-submit:hover { background: #16a34a; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-cancel {
         padding: 10px 26px;
         font-size: 15px;
@@ -528,7 +628,7 @@ renderHeader($title);
     </div>
 
     <!-- ===== FORM ===== -->
-    <form method="POST" class="gform-card">
+    <form method="POST" class="gform-card" enctype="multipart/form-data">
 
         <?php if ($currentRole === 'admin'): ?>
         <div class="gform-section-title"><i class="fas fa-user-tie" style="color:#166534;"></i> Registering On Behalf Of</div>
@@ -572,6 +672,14 @@ renderHeader($title);
                 <label for="tag_number">Ear Tag Number <span class="opt">(optional)</span></label>
                 <input type="text" id="tag_number" name="tag_number"
                        value="<?php echo htmlspecialchars($tag_number); ?>" placeholder="e.g. 0245">
+            </div>
+            <div class="span-2">
+                <label for="goat_photo">Goat Photo <span class="opt">(optional)</span></label>
+                <input type="file" id="goat_photo" name="goat_photo" accept="image/jpeg,image/png,image/webp">
+                <p class="gform-note"><i class="fas fa-image"></i> JPG, PNG, or WEBP. Max 5MB.</p>
+                <div class="gform-photo-preview" id="goat_photo_preview">
+                    <img id="goat_photo_preview_img" src="" alt="Photo preview">
+                </div>
             </div>
         </div>
 
@@ -657,5 +765,47 @@ renderHeader($title);
     });
 </script>
 <?php endif; ?>
+
+<script>
+    // Live client-side preview of the selected goat photo before upload.
+    // This is purely cosmetic - all real validation happens server-side.
+    document.addEventListener('DOMContentLoaded', function () {
+        const photoInput = document.getElementById('goat_photo');
+        const previewBox = document.getElementById('goat_photo_preview');
+        const previewImg = document.getElementById('goat_photo_preview_img');
+        if (!photoInput || !previewBox || !previewImg) return;
+
+        photoInput.addEventListener('change', function () {
+            const file = photoInput.files && photoInput.files[0];
+            if (!file) {
+                previewBox.style.display = 'none';
+                previewImg.src = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewBox.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+
+<script>
+    // Prevent duplicate submissions from double-clicking the submit button.
+    // (The server-side redirect-after-success handles the "refreshed the
+    // page after submitting" case; this handles the "clicked twice" case.)
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form.gform-card');
+        const submitBtn = form ? form.querySelector('.btn-submit') : null;
+        if (!form || !submitBtn) return;
+
+        form.addEventListener('submit', function () {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+        });
+    });
+</script>
 
 <?php renderFooter(); ?>

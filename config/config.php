@@ -6,7 +6,7 @@ define('MAIL_FROM', 'noreply@yourdomain.com');
 define('BASE_URL', 'http://localhost/kandingnisoy'); // Adjust to your base URL
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'soy_php_pdo');
+define('DB_NAME', 'soy_php_pdo1');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 

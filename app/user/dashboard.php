@@ -92,13 +92,13 @@ if ($goatsTableExists) {
         }
     }
 
-    $stmt = $pdo->prepare(
-        "SELECT goat_id, goat_name, status, health_status, updated_at
-         FROM goats
-         WHERE user_id = ?
-         ORDER BY updated_at DESC
-         LIMIT 5"
-    );
+ $stmt = $pdo->prepare(
+    "SELECT goat_id, goat_name, status, health_status, photo_path, updated_at
+     FROM goats
+     WHERE user_id = ?
+     ORDER BY updated_at DESC
+     LIMIT 5"
+);
     $stmt->execute([$userId]);
     $recentGoats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -1454,34 +1454,36 @@ renderHeader($title);
                             ? '#166534'
                             : ($goat['health_status'] === 'sick' ? '#d97706' : '#6b7280');
                     ?>
-                        <article class="goat-card" style="border-left-color: <?php echo $healthColor; ?>;">
-                            <div class="goat-card-top">
-                                <div style="min-width: 0;">
-                                    <a href="<?php echo BASE_URL; ?>/app/goats/goat-view.php?goat_id=<?php echo urlencode($goat['goat_id']); ?>"
-                                       class="goat-card-id">
-                                        <i class="fas fa-tag" style="color: #86efac;" aria-hidden="true"></i>
-                                        <?php echo htmlspecialchars($goat['goat_id']); ?>
-                                    </a>
-                                    <div class="goat-card-name">
-                                        <?php echo htmlspecialchars($goat['goat_name']); ?>
-                                    </div>
-                                </div>
+                       <article class="goat-card" style="border-left-color: <?php echo $healthColor; ?>;">
+                           <div class="goat-card-top">
+    <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+        <?php if (!empty($goat['photo_path'])): ?>
+            <img src="<?php echo BASE_URL . '/app/goats/' . htmlspecialchars($goat['photo_path']); ?>"
+                 alt="Photo of <?php echo htmlspecialchars($goat['goat_name']); ?>"
+                 style="width:48px; height:48px; border-radius:8px; object-fit:cover; border:1px solid #e2e8f0; flex-shrink:0;">
+        <?php else: ?>
+            <div style="width:48px; height:48px; border-radius:8px; background:#f0fdf4; border:1px solid #dcfce7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fas fa-goat" style="color:#86efac; font-size:18px;" aria-hidden="true"></i>
+            </div>
+        <?php endif; ?>
 
-                                <span class="goat-card-date">
-                                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                                    <?php echo date('M d', strtotime($goat['updated_at'])); ?>
-                                </span>
-                            </div>
+        <div style="min-width: 0;">
+            <a href="<?php echo BASE_URL; ?>/app/goats/goat-view.php?goat_id=<?php echo urlencode($goat['goat_id']); ?>"
+               class="goat-card-id">
+                <i class="fas fa-tag" style="color: #86efac;" aria-hidden="true"></i>
+                <?php echo htmlspecialchars($goat['goat_id']); ?>
+            </a>
+            <div class="goat-card-name">
+                <?php echo htmlspecialchars($goat['goat_name']); ?>
+            </div>
+        </div>
+    </div>
 
-                            <div class="goat-card-badges">
-                                <span class="goat-badge" style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;">
-                                    <?php echo goatStatusLabel($goat['status']); ?>
-                                </span>
-                                <span class="goat-badge"
-                                      style="background: <?php echo $healthBg; ?>; color: <?php echo $healthText; ?>; border: 1px solid <?php echo $healthColor; ?>;">
-                                    <?php echo healthStatusLabel($goat['health_status']); ?>
-                                </span>
-                            </div>
+    <span class="goat-card-date">
+        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+        <?php echo date('M d', strtotime($goat['updated_at'])); ?>
+    </span>
+</div>
                         </article>
                     <?php endforeach; ?>
                 </div>
