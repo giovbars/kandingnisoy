@@ -3,10 +3,10 @@ session_start();
 
 // Email configuration (for verification)
 define('MAIL_FROM', 'noreply@yourdomain.com');
-define('BASE_URL', 'http://localhost/kanding-php-pdo'); // Adjust to your base URL
+define('BASE_URL', 'http://localhost/soy-php-pdo'); // Adjust to your base URL
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'kanding_php_pdo');
+define('DB_NAME', 'soy_php_pdo');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 

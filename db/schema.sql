@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS kanding_php_pdo;
+CREATE DATABASE IF NOT EXISTS soy_php_pdo;
 
-USE kanding_php_pdo;
+USE soy_php_pdo;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
--- Migration helper: if you already have an existing kanding_php_pdo
+-- Migration helper: if you already have an existing soy_php_pdo
 -- database from a previous version of this project, run the statements
 -- below instead of the CREATE TABLE above to upgrade in place.
 -- ---------------------------------------------------------------------
