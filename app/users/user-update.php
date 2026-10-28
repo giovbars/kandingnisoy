@@ -40,6 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role = $_POST['role'] ?? $user['role'];
     $status = $_POST['status'] ?? $user['status'];
 
+    // Contact details (phone is normalized to +63... like in Create User)
+    $phone_raw    = trim($_POST['phone_number'] ?? '');
+    $barangay     = trim($_POST['barangay'] ?? '');
+    $municipality = trim($_POST['municipality'] ?? '');
+    $sms_opt_in   = isset($_POST['sms_opt_in']) ? 1 : 0;
+
     $updates = [];
     $params = [];
     $passwordChanged = false;
@@ -67,6 +73,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $params[] = password_hash($password, PASSWORD_DEFAULT);
             $passwordChanged = true;
         }
+    }
+
+    // Phone number: empty = remove number, otherwise must be a valid PH/E.164 number
+    $newPhone = null;
+    if ($phone_raw !== '') {
+        $newPhone = normalizePhoneNumber($phone_raw);
+        if ($newPhone === null && $message === '') {
+            $message = "Invalid phone number format. Use 09171234567 or +639171234567. No changes were saved.";
+        }
+    }
+    if ($message === '' && $newPhone !== ($user['phone_number'] ?: null)) {
+        $updates[] = "phone_number = ?";
+        $params[] = $newPhone;
+    }
+
+    $newBarangay = $barangay !== '' ? $barangay : null;
+    if ($newBarangay !== ($user['barangay'] ?: null)) {
+        $updates[] = "barangay = ?";
+        $params[] = $newBarangay;
+    }
+
+    $newMunicipality = $municipality !== '' ? $municipality : 'Manolo Fortich';
+    if ($newMunicipality !== ($user['municipality'] ?: 'Manolo Fortich')) {
+        $updates[] = "municipality = ?";
+        $params[] = $newMunicipality;
+    }
+
+    if ($sms_opt_in !== (int)$user['sms_opt_in']) {
+        $updates[] = "sms_opt_in = ?";
+        $params[] = $sms_opt_in;
     }
 
     if ($canChangeRole && in_array($role, ['admin', 'manager', 'user']) && $role !== $user['role']) {
@@ -115,6 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "No changes were submitted.";
     }
 }
+
+$formPhone        = ($_SERVER['REQUEST_METHOD'] === 'POST' && !$success) ? ($phone_raw ?? '')    : ($user['phone_number'] ?? '');
+$formBarangay     = ($_SERVER['REQUEST_METHOD'] === 'POST' && !$success) ? ($barangay ?? '')     : ($user['barangay'] ?? '');
+$formMunicipality = ($_SERVER['REQUEST_METHOD'] === 'POST' && !$success) ? ($municipality ?? '') : ($user['municipality'] ?? 'Manolo Fortich');
+$formSmsOptIn     = ($_SERVER['REQUEST_METHOD'] === 'POST' && !$success) ? ($sms_opt_in ?? 0)    : (int)($user['sms_opt_in'] ?? 1);
 
 $title = 'Update User';
 renderHeader($title);
@@ -694,6 +735,13 @@ if (!function_exists('icon')) {
     .gf-field .help-text svg { flex-shrink: 0; margin-top: 2px; }
     .gf-field .help-text.lock { color: #b45309; }
     .gf-field .help-text.lock svg { color: #d97706; }
+    .gf-field .gf-check {
+        display: flex; align-items: center; gap: 10px;
+        font-weight: 600; cursor: pointer; padding: 11px 0;
+    }
+    .gf-field .gf-check input[type="checkbox"] {
+        width: 18px; height: 18px; padding: 0; margin: 0; accent-color: var(--gf-primary, #16a34a);
+    }
 
     /* ---------- BUTTONS ---------- */
     .gf-form-actions {
@@ -952,6 +1000,40 @@ if (!function_exists('icon')) {
                                 <?php echo $isSelf ? 'You cannot deactivate your own account.' : 'You do not have permission to change this status.'; ?>
                             </div>
                         <?php endif; ?>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="gf-field">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="text" id="phone_number" name="phone_number"
+                               value="<?php echo htmlspecialchars($formPhone); ?>"
+                               placeholder="09171234567 o +639171234567" inputmode="tel">
+                        <div class="help-text">
+                            Used for SMS advisories. Format: 09171234567 or +639171234567. Leave empty to remove the number.
+                        </div>
+                    </div>
+
+                    <!-- SMS opt-in -->
+                    <div class="gf-field">
+                        <label>SMS Advisories</label>
+                        <label class="gf-check">
+                            <input type="checkbox" name="sms_opt_in" value="1" <?php echo $formSmsOptIn ? 'checked' : ''; ?>>
+                            Receive weather advisory SMS
+                        </label>
+                    </div>
+
+                    <!-- Barangay -->
+                    <div class="gf-field">
+                        <label for="barangay">Barangay</label>
+                        <input type="text" id="barangay" name="barangay"
+                               value="<?php echo htmlspecialchars($formBarangay); ?>">
+                    </div>
+
+                    <!-- Municipality -->
+                    <div class="gf-field">
+                        <label for="municipality">Municipality</label>
+                        <input type="text" id="municipality" name="municipality"
+                               value="<?php echo htmlspecialchars($formMunicipality); ?>">
                     </div>
 
                 </div><!-- /gf-form-grid -->
