@@ -1144,9 +1144,12 @@ renderHeader($title);
                                     $pathD .= ($i === 0 ? 'M' : ' L') . ' ' . round($pt[0], 1) . ' ' . round($pt[1], 1);
                                 }
                                 $baselineY = $padTop + $innerH;
-                                $fillD = $pathD
-                                    . ' L ' . round($tempPoints[count($tempPoints) - 1][0], 1) . ' ' . $baselineY
-                                    . ' L ' . round($tempPoints[0][0], 1) . ' ' . $baselineY . ' Z';
+                                $fillD = '';
+                                if (!empty($tempPoints)) {   // no forecast data (API down) -> skip the fill area
+                                    $fillD = $pathD
+                                        . ' L ' . round($tempPoints[count($tempPoints) - 1][0], 1) . ' ' . $baselineY
+                                        . ' L ' . round($tempPoints[0][0], 1) . ' ' . $baselineY . ' Z';
+                                }
                                 ?>
 
                                 <!-- Horizontal grid lines -->

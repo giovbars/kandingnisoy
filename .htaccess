@@ -1,0 +1,26 @@
+Options -Indexes
+
+# Block secrets, logs, SQL and other non-public files
+<FilesMatch "^(\.env.*|.*\.(log|sql|md|dsd|json))$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Cron script is for the command line only
+<Files "cron-advisory.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</Files>
+
+# Never serve these folders (even if uploaded by mistake)
+<IfModule mod_alias.c>
+    RedirectMatch 404 /(\.git|tests|db|_import)(/|$)
+</IfModule>
