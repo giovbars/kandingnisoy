@@ -787,14 +787,7 @@ if (!function_exists('icon')) {
     </a>
 
     <ul class="gf-navbar-links">
-        <li><a href="<?php echo BASE_URL; ?>/app/<?php echo $currentRole; ?>/dashboard.php">Dashboard</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/weather/dashboard.php">Weather</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/goats/dashboard.php">Inventory</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/users/dashboard.php" class="active">User Management</a></li>
-        <?php if ($currentRole === 'admin'): ?>
-            <li><a href="<?php echo BASE_URL; ?>/app/goats/farmer-overview.php">Farmers</a></li>
-        <?php endif; ?>
-        <li><a href="<?php echo BASE_URL; ?>/app/auth/signout.php" class="logout">Logout</a></li>
+        <?php gfRenderNavbarLinks($_SESSION['role'] ?? '', 'users'); ?>
     </ul>
 
     <button class="gf-navbar-toggle" type="button" aria-label="Open menu"
@@ -827,34 +820,7 @@ if (!function_exists('icon')) {
     </div>
 
     <nav class="gf-nav-section">
-        <a href="<?php echo BASE_URL; ?>/app/<?php echo $currentRole; ?>/dashboard.php" class="gf-nav-link">
-            <?php echo icon('home', 18); ?>
-            <span>Dashboard</span>
-        </a>
-        <a href="<?php echo BASE_URL; ?>/app/users/dashboard.php" class="gf-nav-link active" aria-current="page">
-            <?php echo icon('users', 18); ?>
-            <span>User Management</span>
-        </a>
-        <?php if ($currentRole === 'admin' || $currentRole === 'manager'): ?>
-            <a href="<?php echo BASE_URL; ?>/app/users/user-create.php" class="gf-nav-link">
-                <?php echo icon('user-plus', 18); ?>
-                <span>Create User</span>
-            </a>
-        <?php endif; ?>
-        <a href="<?php echo BASE_URL; ?>/app/goats/dashboard.php" class="gf-nav-link">
-            <?php echo icon('list-check', 18); ?>
-            <span>Inventory</span>
-        </a>
-        <?php if ($currentRole === 'admin'): ?>
-            <a href="<?php echo BASE_URL; ?>/app/goats/farmer-overview.php" class="gf-nav-link">
-                <?php echo icon('tractor', 18); ?>
-                <span>Farmers</span>
-            </a>
-        <?php endif; ?>
-        <a href="<?php echo BASE_URL; ?>/app/auth/signout.php" class="gf-nav-link logout">
-            <?php echo icon('log-out', 18); ?>
-            <span>Logout</span>
-        </a>
+        <?php gfRenderSidebarLinks($_SESSION['role'] ?? '', 'users'); ?>
     </nav>
 </aside>
 

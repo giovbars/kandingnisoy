@@ -1025,40 +1025,7 @@ renderHeader($title);
     </a>
 
     <ul class="gf-navbar-links">
-        <li>
-            <a href="<?php echo BASE_URL; ?>/app/<?php echo htmlspecialchars($currentRole); ?>/dashboard.php">
-                
-                Dashboard
-            </a>
-        </li>
-        <li>
-            <a href="<?php echo BASE_URL; ?>/app/goats/dashboard.php" class="active">
-               
-                Inventory
-            </a>
-        </li>
-        <?php if (in_array($currentRole, ['user', 'admin'], true)): ?>
-            <li>
-                <a href="<?php echo BASE_URL; ?>/app/goats/goat-create.php">
-                  
-                    Add Goat
-                </a>
-            </li>
-        <?php endif; ?>
-        <?php if (in_array($currentRole, ['manager', 'admin'], true)): ?>
-            <li>
-                <a href="<?php echo BASE_URL; ?>/app/goats/farmer-overview.php">
-                    
-                    Farmers
-                </a>
-            </li>
-        <?php endif; ?>
-        <li>
-            <a href="<?php echo BASE_URL; ?>/app/auth/signout.php" class="logout">
-               
-                Logout
-            </a>
-        </li>
+        <?php gfRenderNavbarLinks($_SESSION['role'] ?? '', 'inventory'); ?>
     </ul>
 
     <button class="gf-navbar-toggle"
@@ -1096,40 +1063,7 @@ renderHeader($title);
     </div>
 
     <nav class="gf-nav-section">
-        <a href="<?php echo BASE_URL; ?>/app/<?php echo htmlspecialchars($currentRole); ?>/dashboard.php"
-           class="gf-nav-link">
-            
-            <span>Dashboard</span>
-        </a>
-
-        <a href="<?php echo BASE_URL; ?>/app/goats/dashboard.php"
-           class="gf-nav-link active"
-           aria-current="page">
-            
-            <span>Inventory</span>
-        </a>
-
-        <?php if (in_array($currentRole, ['user', 'admin'], true)): ?>
-            <a href="<?php echo BASE_URL; ?>/app/goats/goat-create.php"
-               class="gf-nav-link">
-               
-                <span>Add Goat</span>
-            </a>
-        <?php endif; ?>
-
-        <?php if (in_array($currentRole, ['manager', 'admin'], true)): ?>
-            <a href="<?php echo BASE_URL; ?>/app/goats/farmer-overview.php"
-               class="gf-nav-link">
-               
-                <span>Farmers</span>
-            </a>
-        <?php endif; ?>
-
-        <a href="<?php echo BASE_URL; ?>/app/auth/signout.php"
-           class="gf-nav-link logout">
-            
-            <span>Logout</span>
-        </a>
+        <?php gfRenderSidebarLinks($_SESSION['role'] ?? '', 'inventory'); ?>
     </nav>
 </aside>
 

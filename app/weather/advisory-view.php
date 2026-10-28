@@ -98,7 +98,7 @@ renderHeader($title);
         --green: #16a34a; --green-light: #dcfce7;
         --amber: #d97706; --amber-light: #fef3c7;
         --red: #dc2626; --red-light: #fee2e2;
-        --navbar-height: 68px;
+        --navbar-height: 68px; --sidebar-width: 264px;
         --radius: 14px; --radius-sm: 10px;
         --ease: cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -391,10 +391,35 @@ renderHeader($title);
     @media (max-width: 767.98px) {
         .gf-navbar { height: 60px; padding: 0 12px; }
         .gf-navbar-links { display: none; }
+        .gf-navbar-toggle { display: grid; }
         .main { padding: calc(var(--navbar-height) + 16px) 12px 60px; }
         .page-head-left h1 { font-size: 18px; }
         .page-head-left h1 .id-badge { font-size: 12px; padding: 3px 8px; }
     }
+
+    .gf-navbar-toggle { display: none; width: 42px; height: 42px; place-items: center; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 10px; cursor: pointer; color: #fff; padding: 0; }
+    .gf-sidebar {
+        position: fixed; top: 0; right: 0; bottom: 0; width: var(--sidebar-width);
+        background: linear-gradient(180deg, #0f3d24 0%, #14532d 45%, #166534 100%);
+        padding: 24px 18px 40px; color: #fff; overflow-y: auto; z-index: 1060;
+        display: flex; flex-direction: column; transform: translateX(100%);
+        transition: transform 0.32s var(--ease); box-shadow: -8px 0 32px rgba(0, 0, 0, 0.35);
+    }
+    body.gf-sidebar-open .gf-sidebar { transform: translateX(0); }
+    .gf-sidebar-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 8px 22px; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+    .gf-sidebar-close { width: 36px; height: 36px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 10px; color: #fff; cursor: pointer; padding: 0; }
+    .gf-brand { display: flex; align-items: center; gap: 12px; }
+    .gf-brand-icon { width: 46px; height: 46px; border-radius: 13px; background: rgba(255, 255, 255, 0.14); display: grid; place-items: center; font-size: 24px; flex-shrink: 0; }
+    .gf-brand-text { font-size: 16px; font-weight: 800; line-height: 1.2; }
+    .gf-brand-sub { font-size: 10px; font-weight: 700; color: rgba(255, 255, 255, 0.65); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .gf-nav-section { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .gf-nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 11px; color: rgba(255, 255, 255, 0.82); font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s var(--ease); }
+    .gf-nav-link:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+    .gf-nav-link.active { background: #fff; color: #14532d; font-weight: 700; }
+    .gf-nav-link.logout { color: #fca5a5; margin-top: 12px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0; }
+    .gf-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); z-index: 1055; }
+    body.gf-sidebar-open .gf-backdrop { display: block; }
+    @media (max-width: 767.98px) { .gf-navbar-toggle { display: grid; } }
 </style>
 
 <!-- NAVBAR -->
@@ -413,14 +438,39 @@ renderHeader($title);
         </div>
     </a>
     <ul class="gf-navbar-links">
-        <li><a href="<?php echo BASE_URL; ?>/app/admin/dashboard.php">Dashboard</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/weather/dashboard.php">Weather</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/weather/advisory-logs.php" class="active">Advisory Logs</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/goats/dashboard.php">Inventory</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/users/dashboard.php">Users</a></li>
-        <li><a href="<?php echo BASE_URL; ?>/app/auth/signout.php" class="logout">Logout</a></li>
+        <?php gfRenderNavbarLinks($_SESSION['role'] ?? '', 'advisory'); ?>
     </ul>
+    <button class="gf-navbar-toggle" type="button" onclick="toggleSidebar();" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
 </nav>
+
+<aside class="gf-sidebar" id="gfSidebar">
+    <div class="gf-sidebar-header">
+        <div class="gf-brand">
+            <div class="gf-brand-icon">🐐</div>
+            <div>
+                <div class="gf-brand-text">GoatPro</div>
+                <div class="gf-brand-sub"><?php echo ucfirst($currentRole); ?> · Advisory</div>
+            </div>
+        </div>
+        <button class="gf-sidebar-close" type="button" onclick="closeSidebar();">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+    <nav class="gf-nav-section">
+        <?php gfRenderSidebarLinks($_SESSION['role'] ?? '', 'advisory'); ?>
+    </nav>
+</aside>
+
+<div class="gf-backdrop" onclick="closeSidebar();"></div>
+
+<script>
+function toggleSidebar() { document.body.classList.toggle('gf-sidebar-open'); }
+function closeSidebar() { document.body.classList.remove('gf-sidebar-open'); }
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+</script>
+
 
 <!-- MAIN -->
 <div class="main-content" id="main-content">

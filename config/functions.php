@@ -358,4 +358,64 @@ function renderFooter() {
     <?php
 }
 
+/* ============================================================
+ * NAVIGATION (single source of truth for navbar + sidebar)
+ * Based on app/weather/dashboard.php (admin) and
+ * app/user/weather.php (user).
+ * ============================================================ */
+
+function gfNavItems($role): array {
+    $b = BASE_URL . '/app/';
+    switch ($role) {
+        case 'admin':
+            return [
+                ['key' => 'dashboard', 'label' => 'Dashboard',       'url' => $b . 'admin/dashboard.php'],
+                ['key' => 'weather',   'label' => 'Weather',         'url' => $b . 'weather/dashboard.php'],
+                ['key' => 'advisory',  'label' => 'Advisory Logs',   'url' => $b . 'weather/advisory-logs.php'],
+                ['key' => 'inventory', 'label' => 'Inventory',       'url' => $b . 'goats/dashboard.php'],
+                ['key' => 'users',     'label' => 'User Management', 'url' => $b . 'users/dashboard.php'],
+                ['key' => 'farmers',   'label' => 'Farmers',         'url' => $b . 'goats/farmer-overview.php'],
+                ['key' => 'logout',    'label' => 'Logout',          'url' => $b . 'auth/signout.php'],
+            ];
+        case 'manager':
+            return [
+                ['key' => 'dashboard', 'label' => 'Dashboard',       'url' => $b . 'manager/dashboard.php'],
+                ['key' => 'users',     'label' => 'User Management', 'url' => $b . 'users/dashboard.php'],
+                ['key' => 'inventory', 'label' => 'Inventory',       'url' => $b . 'goats/dashboard.php'],
+                ['key' => 'farmers',   'label' => 'Farmers',         'url' => $b . 'goats/farmer-overview.php'],
+                ['key' => 'logout',    'label' => 'Logout',          'url' => $b . 'auth/signout.php'],
+            ];
+        default: // 'user' (farmer)
+            return [
+                ['key' => 'dashboard', 'label' => 'Dashboard', 'url' => $b . 'user/dashboard.php'],
+                ['key' => 'weather',   'label' => 'Weather',   'url' => $b . 'user/weather.php'],
+                ['key' => 'inventory', 'label' => 'Inventory', 'url' => $b . 'goats/dashboard.php'],
+                ['key' => 'add_goat',  'label' => 'Add Goat',  'url' => $b . 'goats/goat-create.php'],
+                ['key' => 'logout',    'label' => 'Logout',    'url' => $b . 'auth/signout.php'],
+            ];
+    }
+}
+
+function gfRenderNavbarLinks($role, string $active = ''): void {
+    foreach (gfNavItems($role) as $item) {
+        $cls = [];
+        if ($item['key'] === $active) $cls[] = 'active';
+        if ($item['key'] === 'logout') $cls[] = 'logout';
+        echo '        <li><a href="' . htmlspecialchars($item['url']) . '"'
+           . ($cls ? ' class="' . implode(' ', $cls) . '"' : '') . '>'
+           . htmlspecialchars($item['label']) . '</a></li>' . "\n";
+    }
+}
+
+function gfRenderSidebarLinks($role, string $active = ''): void {
+    foreach (gfNavItems($role) as $item) {
+        $cls = ['gf-nav-link'];
+        if ($item['key'] === $active) $cls[] = 'active';
+        if ($item['key'] === 'logout') $cls[] = 'logout';
+        echo '        <a href="' . htmlspecialchars($item['url']) . '" class="' . implode(' ', $cls) . '"'
+           . ($item['key'] === $active ? ' aria-current="page"' : '') . '><span>'
+           . htmlspecialchars($item['label']) . '</span></a>' . "\n";
+    }
+}
+
 ?>
