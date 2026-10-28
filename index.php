@@ -218,21 +218,18 @@ if (isLoggedIn()) {
         <div class="grid">
             <!-- Feature 1 -->
             <div class="card">
-                <div class="card-icon"><i class="fas fa-cloud-sun-rain"></i></div>
                 <h3>Interpolated Weather Forecast</h3>
                 <p>Wala nay kinahanglan og mahalon nga weather sensor. Among sistema mag-estimate sa lokal nga panahon base sa datos sa mga kasikbit nga weather stations, ug i-convert kini ngadto sa Heat Stress Index (THI) para sa kanding.</p>
             </div>
 
             <!-- Feature 2 -->
             <div class="card">
-                <div class="card-icon"><i class="fas fa-sms"></i></div>
                 <h3>Automated SMS Advisories</h3>
                 <p>Pag-abot sa kakuyaw (sama sa kusog nga ulan o sobrang init), automatic nga magpadala og SMS ang sistema ngadto sa mga farmer nga naka-register, aron makahimo sila og dayon nga aksyon sama sa pagpasulod sa kanding sa kural.</p>
             </div>
 
             <!-- Feature 3 -->
             <div class="card">
-                <div class="card-icon"><i class="fas fa-paw"></i></div>
                 <h3>Goat Inventory & Reports</h3>
                 <p>I-track ang mga kanding pinaagi sa Goat ID. Makita usab sa Municipal Agriculture Office (MAO) ang mga report sa mga mag-uuma pinaagi sa pag-export niini ngadto sa PDF.</p>
             </div>
