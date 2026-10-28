@@ -54,14 +54,26 @@ if (isLoggedIn()) {
         }
         .navbar-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 900; color: var(--primary-dark); }
         .navbar-brand img { width: 40px; height: 40px; border-radius: 8px; }
+        
         .nav-links { display: flex; gap: 24px; align-items: center; }
-        .nav-links a { font-weight: 500; color: var(--text-2); transition: color 0.2s; }
+        .nav-links a { font-weight: 500; color: var(--text-2); transition: color 0.2s; font-size: 15px; }
         .nav-links a:hover { color: var(--primary); }
+        
         .btn-login {
             padding: 8px 20px; border: 2px solid var(--primary); color: var(--primary);
-            border-radius: 8px; font-weight: 700; transition: all 0.2s;
+            border-radius: 8px; font-weight: 700; transition: all 0.2s; font-size: 14px;
         }
         .btn-login:hover { background: var(--primary); color: #fff; }
+
+        /* BURGER MENU ICON (Hidden by default) */
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: var(--primary-dark);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
 
         /* HERO SECTION */
         .hero {
@@ -72,31 +84,48 @@ if (isLoggedIn()) {
             align-items: center;
             padding: 100px 20px 40px;
             text-align: center;
-            background: linear-gradient(135deg, rgba(240, 253, 244, 0.95) 0%, rgba(220, 252, 231, 0.95) 100%), 
+            /* Mas hayag nga gradient aron klaro ang kanding */
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), 
                         url('<?php echo BASE_URL; ?>/assets/images/goat-bg.jpg');
             background-size: cover; 
             background-position: center; 
             background-attachment: fixed;
+            position: relative;
         }
+
+        /* Walay white background, gibutangan lang og kusog nga text-shadow */
+        .hero-content {
+            max-width: 1000px;
+            z-index: 2;
+        }
+
         .hero h1 {
-            font-size: 48px; font-weight: 900; color: var(--primary-dark);
-            margin-bottom: 20px; line-height: 1.1; max-width: 900px;
+            font-size: 54px; font-weight: 900; color: #ffffff;
+            margin-bottom: 25px; line-height: 1.2;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8); /* Kusog nga shadow para klaro sa hayag */
         }
-        .hero p { font-size: 18px; color: var(--text-2); max-width: 800px; margin: 0 auto 40px; }
+        .hero p { 
+            font-size: 20px; color: #f8fafc; margin: 0 auto 40px; max-width: 800px; 
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.9);
+            font-weight: 500;
+        }
+        /* Highlight ang mga importanteng pulong */
+        .hero p strong { color: #4ade80; font-weight: 700; }
+        
         .hero-buttons { display: flex; gap: 16px; justify-content: center; }
         
         .btn-primary {
             padding: 14px 32px; background: var(--primary); color: #fff;
             border-radius: 10px; font-weight: 700; font-size: 16px;
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.5); transition: all 0.2s;
         }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
         .btn-secondary {
-            padding: 14px 32px; background: #fff; color: var(--primary-dark);
-            border: 1px solid var(--border); border-radius: 10px; font-weight: 700; font-size: 16px;
-            transition: all 0.2s;
+            padding: 14px 32px; background: rgba(255, 255, 255, 0.9); color: var(--primary-dark);
+            border: 2px solid var(--border); border-radius: 10px; font-weight: 700; font-size: 16px;
+            transition: all 0.2s; backdrop-filter: blur(5px);
         }
-        .btn-secondary:hover { background: #f8fafc; transform: translateY(-2px); }
+        .btn-secondary:hover { background: #ffffff; transform: translateY(-2px); }
 
         /* ABOUT SECTION */
         .about-section {
@@ -104,10 +133,7 @@ if (isLoggedIn()) {
             background: #ffffff;
             border-bottom: 1px solid var(--border);
         }
-        .about-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .about-container { max-width: 900px; margin: 0 auto; }
         .about-container h2 {
             font-size: 32px; font-weight: 800; color: var(--primary-dark); margin-bottom: 20px; text-align: center;
         }
@@ -121,12 +147,8 @@ if (isLoggedIn()) {
             border-radius: 0 8px 8px 0;
             margin: 30px 0;
         }
-        .highlight-box h4 {
-            color: var(--primary-dark); margin-bottom: 10px; font-size: 18px;
-        }
-        .highlight-box p {
-            margin-bottom: 0; font-size: 15px; color: var(--text-2);
-        }
+        .highlight-box h4 { color: var(--primary-dark); margin-bottom: 10px; font-size: 18px; }
+        .highlight-box p { margin-bottom: 0; font-size: 15px; color: var(--text-2); }
 
         /* FEATURES SECTION */
         .features { padding: 80px 20px; max-width: 1200px; margin: 0 auto; background: var(--bg); }
@@ -151,11 +173,44 @@ if (isLoggedIn()) {
         .footer { background: var(--primary-dark); color: #fff; padding: 40px 20px; text-align: center; }
         .footer p { opacity: 0.7; font-size: 14px; }
 
+        /* =========================================
+           RESPONSIVE DESIGN (MOBILE) - BURGER MENU
+           ========================================= */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 36px; }
-            .nav-links { display: none; }
             .navbar { padding: 0 20px; }
-            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
+            
+            /* Itago ang normal nga links */
+            .nav-links {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: #ffffff;
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                border-bottom: 1px solid var(--border);
+                /* Animation para sa dropdown */
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: clip-path 0.3s ease-in-out;
+            }
+
+            /* Kung i-click ang burger, mo-appear ang menu */
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+
+            .nav-links a { font-size: 16px; width: 100%; text-align: center; }
+            .btn-login { width: 100%; text-align: center; display: block; }
+
+            /* Ipakita ang Burger Menu Icon */
+            .menu-toggle { display: block; }
+
+            /* I-adjust ang Hero text para sa mobile */
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 16px; }
+            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
         }
     </style>
 </head>
@@ -167,21 +222,31 @@ if (isLoggedIn()) {
             <img src="<?php echo BASE_URL; ?>/assets/images/goat-logo.png" alt="Kandingnisoy Logo" onerror="this.style.display='none'">
             GOAT PRO
         </div>
-        <div class="nav-links">
-            <a href="#home">Home</a> <!-- Gidugang ang Home dinhi -->
-            <a href="#about">About</a>
-            <a href="#features">Features</a>
+        
+        <!-- Normal Links (Desktop) -->
+        <div class="nav-links" id="navLinks">
+            <a href="#home" onclick="toggleMenu()">Home</a>
+            <a href="#about" onclick="toggleMenu()">About</a>
+            <a href="#features" onclick="toggleMenu()">Features</a>
             <a href="<?php echo BASE_URL; ?>/login.php" class="btn-login">Login</a>
         </div>
+
+        <!-- Burger Icon (Mobile) -->
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
     </nav>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
-        <h1>Precision Livestock Farming for Goat Production</h1>
-        <p>Gamit ang <strong>Interpolated Weather Data</strong>, among sistema naghatag og automated weather advisories pinaagi sa <strong>SMS</strong> aron malikayan ang epekto sa <strong>Heat Stress</strong> ug mapalambo ang produksyon sa mga kanding sa Manolo Fortich, Bukidnon.</p>
-        <div class="hero-buttons">
-            <a href="<?php echo BASE_URL; ?>/login.php" class="btn-primary">Login</a>
-            <a href="#about" class="btn-secondary">Learn More</a>
+        <!-- Walay white background, transparent na, text shadow ra ang gigamit -->
+        <div class="hero-content">
+            <h1>Precision Livestock Farming for Goat Production</h1>
+            <p>Gamit ang <strong>Interpolated Weather Data</strong>, among sistema naghatag og automated weather advisories pinaagi sa <strong>SMS</strong> aron malikayan ang epekto sa <strong>Heat Stress</strong> ug mapalambo ang produksyon sa mga kanding sa Manolo Fortich, Bukidnon.</p>
+            <div class="hero-buttons">
+                <a href="<?php echo BASE_URL; ?>/login.php" class="btn-primary">Login</a>
+                <a href="#about" class="btn-secondary">Learn More</a>
+            </div>
         </div>
     </section>
 
@@ -218,18 +283,21 @@ if (isLoggedIn()) {
         <div class="grid">
             <!-- Feature 1 -->
             <div class="card">
+                
                 <h3>Interpolated Weather Forecast</h3>
                 <p>Wala nay kinahanglan og mahalon nga weather sensor. Among sistema mag-estimate sa lokal nga panahon base sa datos sa mga kasikbit nga weather stations, ug i-convert kini ngadto sa Heat Stress Index (THI) para sa kanding.</p>
             </div>
 
             <!-- Feature 2 -->
             <div class="card">
+                
                 <h3>Automated SMS Advisories</h3>
                 <p>Pag-abot sa kakuyaw (sama sa kusog nga ulan o sobrang init), automatic nga magpadala og SMS ang sistema ngadto sa mga farmer nga naka-register, aron makahimo sila og dayon nga aksyon sama sa pagpasulod sa kanding sa kural.</p>
             </div>
 
             <!-- Feature 3 -->
             <div class="card">
+                
                 <h3>Goat Inventory & Reports</h3>
                 <p>I-track ang mga kanding pinaagi sa Goat ID. Makita usab sa Municipal Agriculture Office (MAO) ang mga report sa mga mag-uuma pinaagi sa pag-export niini ngadto sa PDF.</p>
             </div>
@@ -243,5 +311,12 @@ if (isLoggedIn()) {
         <p style="margin-top: 8px;">Northern Bukidnon State College 🐐</p>
     </footer>
 
+    <!-- SCRIPT PARA SA BURGER MENU -->
+    <script>
+        function toggleMenu() {
+            var nav = document.getElementById("navLinks");
+            nav.classList.toggle("active");
+        }
+    </script>
 </body>
 </html>
