@@ -895,8 +895,8 @@ renderHeader($title);
 <nav class="gf-navbar">
     <a href="<?php echo BASE_URL; ?>/app/admin/dashboard.php" class="gf-navbar-brand">
         <div class="gf-navbar-logo">
-            <?php if (file_exists(__DIR__ . '/../../assets/img/goatpro-logo.png')): ?>
-                <img src="<?php echo BASE_URL; ?>/assets/img/goatpro-logo.png" alt="GoatPro Logo">
+              <?php if (file_exists(__DIR__ . '/../../assets/images/goat-logo.png')): ?>
+                <img src="<?php echo BASE_URL; ?>/assets/images/goat-logo.png" alt="GoatPro Logo">
             <?php else: ?>
                 <span aria-hidden="true">🐐</span>
             <?php endif; ?>

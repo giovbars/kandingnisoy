@@ -32,7 +32,7 @@ if ($__debug) {
 }
 
 // Email configuration (for verification) - set MAIL_FROM in .env
-define('MAIL_FROM', getenv('MAIL_FROM') ?: 'noreply@yourdomain.com');
+define('MAIL_FROM', getenv('MAIL_FROM') ?: 'noreply@goatpro.ics-dev.io');
 
 // Your site URL, no trailing slash. Example: https://yourdomain.com
 define('BASE_URL', rtrim(getenv('BASE_URL') ?: 'https://goatpro.ics-dev.io/', '/'));
