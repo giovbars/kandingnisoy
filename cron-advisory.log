@@ -129,3 +129,8 @@
 [2026-10-26 11:19 AM] Forecast Check: Max Pop = 100%, High Pop Count = 17
 [2026-10-26 11:19 AM] Advisory Detected: [medium] Pahibalo: Base sa forecast, dako ang tsansa nga mo-ulan ugma sa buntag. Palihog siguroha nga naa sa silong o kural ang mga kanding inig ka-buntag ug naay dry nga pagkaon (kumpay) nga ready, kay posible nga dili sila pwede itugway kung basa ang sagbot.
 [2026-10-26 11:19 AM] SKIPPED: Medium rain advisory sent in the last 3 hours.
+[2026-10-28 10:14 AM] --- CRON STARTED ---
+[2026-10-28 10:14 AM] Weather Data: Temp=29°C, RainToday=10.8mm, RainTonight=1.2mm
+[2026-10-28 10:14 AM] Forecast Check: Max Pop = 100%, High Pop Count = 22
+[2026-10-28 10:14 AM] Advisory Detected: [medium] Pahibalo: Base sa forecast, dako ang tsansa nga mo-ulan ugma sa buntag. Palihog siguroha nga naa sa silong o kural ang mga kanding inig ka-buntag ug naay dry nga pagkaon (kumpay) nga ready, kay posible nga dili sila pwede itugway kung basa ang sagbot.
+[2026-10-28 10:14 AM] Sending advisory to farmers...

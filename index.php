@@ -98,7 +98,7 @@ if (isLoggedIn()) {
         }
         .btn-secondary:hover { background: #f8fafc; transform: translateY(-2px); }
 
-        /* ABOUT SECTION (Naka-base na sa Thesis Paper) */
+        /* ABOUT SECTION */
         .about-section {
             padding: 80px 20px;
             background: #ffffff;
@@ -168,6 +168,7 @@ if (isLoggedIn()) {
             GOAT PRO
         </div>
         <div class="nav-links">
+            <a href="#home">Home</a> <!-- Gidugang ang Home dinhi -->
             <a href="#about">About</a>
             <a href="#features">Features</a>
             <a href="<?php echo BASE_URL; ?>/login.php" class="btn-login">Login</a>
@@ -184,7 +185,7 @@ if (isLoggedIn()) {
         </div>
     </section>
 
-    <!-- ABOUT SECTION (Naka-base sa Thesis) -->
+    <!-- ABOUT SECTION -->
     <section id="about" class="about-section">
         <div class="about-container">
             <h2>About the System</h2>
@@ -199,7 +200,7 @@ if (isLoggedIn()) {
 
             <div class="highlight-box">
                 <h4>Unsaon niya pag-obra?</h4>
-                <p>Imbes nga mogamit og physical sensors sa uma, among sistema mag-gamit sa <strong>Interpolated Weather Data</strong>—mag-estimate sa lokal nga panahon base sa datos gikan sa mga kasikbit nga weather stations. Kini i-convert ngadto sa <strong>Temperature-Humidity Index (THI)</strong> aron mahibaw-an kung naay heat stress risk. Kung naay kakuyaw (sama sa kusog nga ulan o grabeng kainit), <strong>automatic nga magpadala og SMS Advisory</strong> ang sistema ngadto sa cellphone sa mag-uuma aron makahimo sila dayon og aksyon sama sa pagpasulod sa kanding sa kural.</p>
+                <p>Imbes nga mogamit og physical sensors sa uma, among sistema mag-gamit sa <strong>Interpolated Weather Data</strong> mag-estimate sa lokal nga panahon base sa datos gikan sa mga kasikbit nga weather stations. Kini i-convert ngadto sa <strong>Temperature-Humidity Index (THI)</strong> aron mahibaw-an kung naay heat stress risk. Kung naay kakuyaw (sama sa kusog nga ulan o grabeng kainit), <strong>automatic nga magpadala og SMS Advisory</strong> ang sistema ngadto sa cellphone sa mag-uuma aron makahimo sila dayon og aksyon sama sa pagpasulod sa kanding sa kural.</p>
             </div>
 
             <p class="about-text" style="text-align: center; font-weight: bold; margin-top: 30px; color: var(--primary);">

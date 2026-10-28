@@ -533,7 +533,7 @@ renderHeader('Login');
             </div>
             <h1 class="compact-title text-xl sm:text-2xl font-bold flex items-center justify-center gap-2 text-white drop-shadow-lg">
                 <span class="grass-icon text-lg sm:text-xl" style="color: #4ADE80;"></span>
-                <span style="color: #FFFFFF;">KANDINGNISOY</span>
+                <span style="color: #FFFFFF;">GOAT PRO</span>
                 <span class="grass-icon text-lg sm:text-xl" style="color: #4ADE80;"></span>
             </h1>
         </div>
@@ -679,9 +679,6 @@ renderHeader('Login');
                 <div class="compact-links mt-2 pt-2 border-t border-gray-200">
                     <div class="text-center">
                         <p class="text-xs text-slate-muted flex items-center justify-center gap-3 flex-wrap">
-                            <i class="fas fa-info-circle text-grass-400"></i>
-                     
-                            <span>Need help? <a href="<?php echo BASE_URL; ?>/contact.php" class="link-green">Contact support</a></span>
                             <span class="hidden sm:inline w-px h-3 bg-gray-300"></span>
                             <a href="<?php echo BASE_URL; ?>/privacy.php" class="link-green">Privacy Policy</a>
                             <span class="hidden sm:inline w-px h-3 bg-gray-300"></span>

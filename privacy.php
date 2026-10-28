@@ -7,7 +7,7 @@ require_once 'config/functions.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Kandingnisoy</title>
+    <title>Privacy Policy - GOAT PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,7 +17,7 @@ require_once 'config/functions.php';
     <nav class="bg-white shadow-sm border-b border-gray-200 py-4">
         <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
             <a href="<?php echo BASE_URL; ?>/index.php" class="flex items-center gap-2 text-xl font-bold text-green-700">
-                <i class="fas fa-leaf"></i> Kandingnisoy
+                <i class="fas fa-leaf"></i> GOAT PRO
             </a>
             <a href="<?php echo BASE_URL; ?>/login.php" class="text-sm font-semibold text-gray-600 hover:text-green-600 transition">
                 <i class="fas fa-arrow-left"></i> Back to Login
@@ -34,7 +34,7 @@ require_once 'config/functions.php';
             <div class="space-y-6 text-gray-700 leading-relaxed">
                 <section>
                     <h2 class="text-xl font-bold text-gray-900 mb-2">1. Information We Collect</h2>
-                    <p>When you register for the Kandingnisoy - Precision Livestock Farming System, we collect personal information such as your full name, email address, contact number, and farm location (Barangay/Municipality). We also collect data regarding your goat inventory (Goat ID, breed, health status).</p>
+                    <p>When you register for the GOAT PRO - Precision Livestock Farming System, we collect personal information such as your full name, email address, contact number, and farm location (Barangay/Municipality). We also collect data regarding your goat inventory (Goat ID, breed, health status).</p>
                 </section>
 
                 <section>

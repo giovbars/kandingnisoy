@@ -7,7 +7,7 @@ require_once 'config/functions.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service - Kandingnisoy</title>
+    <title>Terms of Service - GOAT PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,7 +17,7 @@ require_once 'config/functions.php';
     <nav class="bg-white shadow-sm border-b border-gray-200 py-4">
         <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
             <a href="<?php echo BASE_URL; ?>/index.php" class="flex items-center gap-2 text-xl font-bold text-green-700">
-                <i class="fas fa-leaf"></i> Kandingnisoy
+                <i class="fas fa-leaf"></i> GOAT PRO
             </a>
             <a href="<?php echo BASE_URL; ?>/login.php" class="text-sm font-semibold text-gray-600 hover:text-green-600 transition">
                 <i class="fas fa-arrow-left"></i> Back to Login
@@ -34,7 +34,7 @@ require_once 'config/functions.php';
             <div class="space-y-6 text-gray-700 leading-relaxed">
                 <section>
                     <h2 class="text-xl font-bold text-gray-900 mb-2">1. Acceptance of Terms</h2>
-                    <p>By accessing and using the Kandingnisoy system, you agree to be bound by these Terms of Service. This system is developed as a Capstone Project for Northern Bukidnon State College to assist small-scale goat farmers in Manolo Fortich, Bukidnon.</p>
+                    <p>By accessing and using the GOAT PRO system, you agree to be bound by these Terms of Service. This system is developed as a Capstone Project for Northern Bukidnon State College to assist small-scale goat farmers in Manolo Fortich, Bukidnon.</p>
                 </section>
 
                 <section>
