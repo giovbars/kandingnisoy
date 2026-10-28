@@ -6,6 +6,12 @@
  * Mag-check siya sa weather ug automatic nga mag-send og SMS.
  */
 
+// CLI ONLY: dili pwede i-open pinaagi sa browser
+if (php_sapi_name() !== 'cli') {
+    http_response_code(403);
+    exit('Forbidden');
+}
+
 // I-set ang PH Time
 date_default_timezone_set('Asia/Manila');
 
