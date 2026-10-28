@@ -275,7 +275,7 @@ if (isLoggedIn()) {
         </div>
     </section>
 
-    <!-- FEATURES SECTION -->
+    <!-- FEATURES SECTION  LOCALHOST-->
     <section id="features" class="features">
         <h2 class="section-title">Features sa GOAT PRO</h2>
         <p class="section-sub">Ang mga teknolohiya nga nagsuporta sa atong mga mag-uuma.</p>
