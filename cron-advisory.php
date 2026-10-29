@@ -133,13 +133,13 @@ $priority = 'low';
 // Rule 1: Sunrise Tigway Advisory
 if ($isMorning && $past12hRain > 1) {
     $priority = 'high'; 
-    $msg = "Maayong buntag! Nihunong na ang ulan gabii. Pwede na ninyo matugway (ipagawas) ang mga kanding sugod 7:00 AM kay moinit na ang adlaw ug mo-uga na ang sagbot.";
+    $msg = "Pahibalo! Tungod kay bugnaw ang panahon ka gabie, posible nga basa pa ang sagbot sa sayong kabuntagon tungod sa umog. Kung mosubang ang adlaw mga alas 6:00 sa buntag, mas maayong ipagawas na ang mga kanding ngadto sa tugwayan mga alas 7:00 sa buntag aron makahatag og igong panahon nga mauga ang sagbot.";
     $advisory = ['type' => 'rain', 'msg' => $msg];
 }
 // Rule 2: Heavy Rain (HIGH)
 elseif ($rainTonight > 5 || $rainToday > 15) {
     $priority = 'high';
-    $msg = "URGENTE: Kusog nga ulan ({$rainTonight}mm) ang gi-expect karong gabhiona. Palihog pasulod sa kural o silong ang mga kanding aron dili mabasa ug matugnawan pwede ra ninyo kumpayan. Ayaw pagpanggawas hangtod mohunong ang ulan ug moinit ang panahon ugma.";
+    $msg = "Pahibalo: Kusog nga ulan ({$rainTonight}mm) ang gi-expect karong gabiona. Palihog pasulod sa kural o silong ang mga kanding aron dili mabasa ug matugnawan pwede ra ninyo kumpayan. Ayaw pagpanggawas hangtod mohunong ang ulan ug moinit ang panahon ugma.";
     $advisory = ['type' => 'rain', 'msg' => $msg];
 } 
 // Rule 3: Light Rain or High Probability (MEDIUM)
