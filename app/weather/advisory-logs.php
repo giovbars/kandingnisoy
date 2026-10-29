@@ -456,7 +456,7 @@ document.addEventListener('keydown', function (e) { if (e.key === 'Escape') clos
             <!-- PAGE HEADER -->
             <div class="page-head">
                 <div class="page-head-left">
-                    <h1>📋 Advisory Logs</h1>
+                    <h1>Advisory Logs</h1>
                     <p>History sa tanan SMS advisories nga gipadala sa farmers</p>
                 </div>
                 <a href="<?php echo BASE_URL; ?>/app/weather/dashboard.php" class="back-btn">
@@ -533,7 +533,7 @@ document.addEventListener('keydown', function (e) { if (e.key === 'Escape') clos
                                    value="<?php echo htmlspecialchars($dateTo); ?>">
                         </div>
                         <div class="filter-actions">
-                            <button type="submit" class="btn btn-primary">🔍 Filter</button>
+                            <button type="submit" class="btn btn-primary">Filter</button>
                             <?php if ($search || $typeFilter || $priorityFilter || $statusFilter || $dateFrom || $dateTo): ?>
                                 <a href="<?php echo BASE_URL; ?>/app/weather/advisory-logs.php" class="btn btn-secondary">Clear</a>
                             <?php endif; ?>
@@ -546,7 +546,7 @@ document.addEventListener('keydown', function (e) { if (e.key === 'Escape') clos
             <div class="table-card">
                 <?php if (empty($logs)): ?>
                     <div class="empty">
-                        <div class="empty-icon">📭</div>
+                        <div class="empty-icon"></div>
                         <p>Walay advisory logs nga naka-record.</p>
                     </div>
                 <?php else: ?>
