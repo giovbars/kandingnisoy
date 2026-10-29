@@ -553,7 +553,7 @@ $isDashboard = (basename($_SERVER['PHP_SELF']) == 'dashboard.php');
         </div>
         <div class="gf-navbar-brand-text">
             <span class="gf-navbar-title">GoatPro</span>
-            <span class="gf-navbar-sub">Manager</span>
+           
         </div>
     </a>
     <ul class="gf-navbar-links">
@@ -574,7 +574,7 @@ $isDashboard = (basename($_SERVER['PHP_SELF']) == 'dashboard.php');
             <div class="gf-brand-icon">🐐</div>
             <div>
                 <div class="gf-brand-text">GoatPro</div>
-                <div class="gf-brand-sub">Manager</div>
+             
             </div>
         </div>
         <button class="gf-sidebar-close" type="button" onclick="closeSidebar();">

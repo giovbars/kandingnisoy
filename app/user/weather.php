@@ -933,7 +933,7 @@ renderHeader($title);
         </div>
         <div class="gf-navbar-brand-text">
             <span class="gf-navbar-title">GoatPro</span>
-            <span class="gf-navbar-sub">Farmer</span>
+            
         </div>
     </a>
     <ul class="gf-navbar-links">
@@ -950,7 +950,7 @@ renderHeader($title);
             <div class="gf-brand-icon">🐐</div>
             <div>
                 <div class="gf-brand-text">GoatPro</div>
-                <div class="gf-brand-sub">Farmer · Weather</div>
+                
             </div>
         </div>
         <button class="gf-sidebar-close" type="button" onclick="closeSidebar();">

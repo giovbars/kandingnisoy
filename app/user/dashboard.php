@@ -907,7 +907,7 @@ renderHeader($title);
         </div>
         <div class="gf-navbar-brand-text">
             <span class="gf-navbar-title">GoatPro</span>
-            <span class="gf-navbar-sub">Farmer</span>
+            
         </div>
     </a>
 
@@ -934,7 +934,7 @@ renderHeader($title);
             </div>
             <div>
                 <div class="gf-brand-text">GoatPro</div>
-                <div class="gf-brand-sub">Farmer</div>
+                
             </div>
         </div>
         <button class="gf-sidebar-close" type="button" aria-label="Close menu" onclick="closeSidebar();">

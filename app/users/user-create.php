@@ -901,7 +901,7 @@ if (!function_exists('icon')) {
         </div>
         <div class="gf-navbar-brand-text">
             <span class="gf-navbar-title">GoatPro</span>
-            <span class="gf-navbar-sub"><?php echo ucfirst($currentRole); ?></span>
+           
         </div>
     </a>
 
@@ -930,7 +930,7 @@ if (!function_exists('icon')) {
             </div>
             <div>
                 <div class="gf-brand-text">GoatPro</div>
-                <div class="gf-brand-sub"><?php echo ucfirst($currentRole); ?></div>
+               
             </div>
         </div>
         <button class="gf-sidebar-close" type="button" aria-label="Close menu" onclick="closeSidebar();">

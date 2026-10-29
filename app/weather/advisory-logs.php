@@ -410,7 +410,7 @@ renderHeader($title);
         </div>
         <div class="gf-navbar-brand-text">
             <span class="gf-navbar-title">GoatPro</span>
-            <span class="gf-navbar-sub"><?php echo ucfirst($currentRole); ?></span>
+          
         </div>
     </a>
     <ul class="gf-navbar-links">
